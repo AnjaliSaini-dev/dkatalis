@@ -92,6 +92,7 @@ public class MainTest {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void checkoutFailTest() throws InterruptedException {
 		WebDriver driver =new ChromeDriver();
@@ -123,7 +124,7 @@ public class MainTest {
 		enterData(driver, "//*[@id=\"application\"]/div[3]/div/div/div/form/div[2]/div[1]/input", "4911 1111 1111 1113");
 		
 		//Enter Expiration date
-		enterData(driver, "//*[@id=\"application\"]/div[3]/div/div/div/form/div[2]/div[2]/input", "02/21");
+		enterData(driver, "//*[@id=\"application\"]/div[3]/div/div/div/form/div[2]/div[2]/input", "03/21");
         
 	
 		//Enter CVV Number
@@ -137,11 +138,11 @@ public class MainTest {
 		
 		driver.switchTo().frame(iframeElement);
 		
-		WebDriverWait iframeWait = new WebDriverWait(driver, 10);
-		iframeWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("PaRes")));
+		WebDriverWait iframeWait = new WebDriverWait(driver, 30);
+		iframeWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"PaRes\"]")));
         
 		
-		WebElement enterPasswordOtp = driver.findElement(By.id("PaRes"));
+		WebElement enterPasswordOtp = driver.findElement(By.xpath("//*[@id=\"PaRes\"]"));
 		enterPasswordOtp.sendKeys("112233");
 
 		
@@ -149,14 +150,14 @@ public class MainTest {
 		findElementByXpathAndClick(driver,"//*[@id=\"acsForm\"]/div[6]/div/button[1]");
 		
 		
+		driver.switchTo().defaultContent();
 		
-		System.out.println("Hello\n\n\n");
-		WebElement test = (driver.findElement(By.xpath("//*[@id=\"application\"]/div[3]/div/div/div/div/div/div[3]/div")));
-		System.out.println((test).getAttribute("innerHTML"));
-		System.out.println("Hello\n\n\n");
-		Thread.sleep(1115000);
+		driver.switchTo().frame("snap-midtrans");
 		
-		Assert.assertEquals((driver.findElement(By.xpath("//*[@id=\"application\"]/div[3]/div/div/div/div/div/div[1]/span"))).getAttribute("innerHTML"), "Transaction failed");
+		Thread.sleep(2000);
+		WebElement test = (driver.findElement(By.xpath("//*[@id=\"application\"]/div[1]/a/div/span")));
+		String failText = (test).getAttribute("innerHTML");
+		Assert.assertTrue(failText.equals("Use Another Payment Options"));
 		
 		
 		
